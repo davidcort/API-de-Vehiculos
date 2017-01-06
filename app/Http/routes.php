@@ -11,6 +11,7 @@
 |
 */
 
+Route::resource('vehiculos','VehiculoController', ['only' => ['index', 'show']]); //Solo necesitamos index y show
 Route::resource('fabricantes','FabricanteController');
-Route::resource('fabricantes.vehiculos','VehiculoController');
-Route::get('/','VehiculoController@showAll'); //Muestra todos los vehiculos
+Route::resource('fabricantes.vehiculos','FabricanteVehiculoController',['except' => 'show']); //recurso anidado
+//Route::get('/','VehiculoController@showAll'); //Muestra todos los vehiculos
