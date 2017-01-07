@@ -10,6 +10,6 @@ class Fabricante extends Model
 
     public function vehiculos()
     {
-        $this->hasMany('Vehiculo'); //Relación de uno a muchos con la tabla vehiculos
+        return $this->hasMany('App\Vehiculo'); //Relación de uno a muchos con la tabla vehiculos
     }
 }

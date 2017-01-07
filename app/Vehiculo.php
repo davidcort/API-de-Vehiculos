@@ -1,6 +1,5 @@
 <?php namespace App;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 class Vehiculo extends Model
@@ -10,8 +9,8 @@ class Vehiculo extends Model
     protected $fillable = array('color', 'cilindraje', 'potencia', 'peso','fabricante_id');
     protected $hidden = ['created_at', 'updated_at'];
 
-    public function fabricante()
+    public function fabricantes()
     {
-        $this->belongsTo('Fabricante'); //Relación de uno a uno
+        return $this->belongsTo('App\Fabricante'); //Relación de uno a uno
     }
 }
