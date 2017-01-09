@@ -9,6 +9,11 @@ use App\Fabricante; //Modelo Fabricante
 
 class FabricanteController extends Controller {
 	
+	public function __construct()
+	{
+		$this->middleware('auth.basic', ['only' => ['store','update','destroy']]); //Indicamos que tipo de middleware que vamos a usar
+	}
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -21,23 +26,19 @@ class FabricanteController extends Controller {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		return 'Formulario para crear fabricante';
-	}
-
-	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(Request $request) //Recibiendo la petición con inyección de dependencias
 	{
-		return "Recibiendo algo";
+		if(!$request->input('nombre') || !$request->input('telefono')) //Nombre y teléfono para crear al fabricante
+		{
+			return response()->json(['mensaje' => 'No es posible procesar los valores','codigo' => 422],422);
+		}
+
+		Fabricante::create($request->all()); //Indicamos que recibimos todos los valores	
+		return response()->json(['mensaje' => 'Fabricante insertado'], 201);	
 	}
 
 	/**
@@ -55,17 +56,6 @@ class FabricanteController extends Controller {
 		}
 
 		return response()->json(['data' => $fabricante],200);
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		return 'mostrando formulario para editar un fabricante con id '.$id;
 	}
 
 	/**

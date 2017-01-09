@@ -4,10 +4,16 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Fabricante;
 use App\Vehiculo;
+use App\Http\Middleware\Authenticate;
 
 use Illuminate\Http\Request;
 
 class FabricanteVehiculoController extends Controller {
+
+	public function __construct()
+	{
+		$this->middleware('auth.basic', ['only' => ['store','update','destroy']]); //Indicamos que tipo de middleware que vamos a usar
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -20,7 +26,7 @@ class FabricanteVehiculoController extends Controller {
 
 		if(!$fabricante)
 		{
-			return response()->json(["mensaje"=>"Fabricante no encontrado", "codigo"=>404],400);		
+			return response()->json(["mensaje"=>"No se encuentra este fabricante", "codigo"=>404],400);		
 		}
 
 		return response()->json(['data'=>$fabricante->vehiculos()->get()],200); //Se obtienen todos los vehiculos del fabricante con el metodo vehiculos()
@@ -42,9 +48,30 @@ class FabricanteVehiculoController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(Request $request, $id)
 	{
-		//
+		//fabricante_id
+		//serie (autoincrement) no neesario
+		//color
+		//clilindraje
+		//potencia
+		//peso
+
+		if(!$request->input('color') || !$request->input('cilindraje') || !$request->input('potencia') || !$request->input('peso'))
+		{
+			return response()->json(['mensaje'=>'No se pudieron procesar los valores','codigo'=>422],422);
+		}
+
+		$fabricante = Fabricante::find($id); //Tomamos el id de la URL
+
+		if(!$fabricante)
+		{
+			return response()->json(['mensaje'=>'No existe fabricante asociado','codigo'=>404],404);
+		}
+
+		$fabricante->vehiculos()->create($request->all()); //Accedemos a la relacion con vehiculos
+
+		return response()->json(['mensaje'=>'Vehiculo insertado'],201);
 	}
 
 	/**

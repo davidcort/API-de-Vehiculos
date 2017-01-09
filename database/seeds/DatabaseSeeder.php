@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class DatabaseSeeder extends Seeder {
 
@@ -14,6 +15,8 @@ class DatabaseSeeder extends Seeder {
 	{
 	 	$this->call('FabricanteSeeder');
 		$this->call('VehiculoSeeder');
+		User::truncate(); //Truncamos ya que solo se utilizara un dato
+		$this->call('UserSeeder');
 	}
 
 }
