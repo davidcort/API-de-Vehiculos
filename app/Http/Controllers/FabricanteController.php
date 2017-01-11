@@ -64,9 +64,54 @@ class FabricanteController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(Request $request, $id)
 	{
-		//
+		$metodo = $request->method();
+		$fabricante = Fabricante::find($id);
+
+		if(!$fabricante)
+		{
+			return response()->json(['mensaje'=>'No se encuentra este fabricante','codigo'=>404],404);
+		}
+
+		if($metodo === 'PATCH') //Si metodo es igual tanto en tipo como en valor
+		{
+			$nombre = $request->input('nombre');
+			
+			if($nombre != null && $nombre != '')
+			{
+				$fabricante->nombre = $nombre;
+			}
+
+			$telefono = $request->input('telefono');
+
+			if($telefono != null && $telefono != '')
+			{
+				$fabricante->telefono = $telefono;
+			}
+
+			$fabricante->save(); //Con este método guardamos la informacion recibida en la BD
+
+			return response()->json(['mensaje' => 'Fabricante insertado'], 200);
+		
+		}else{
+
+			$nombre = $request->input('nombre');
+			$telefono = $request->input('telefono');
+
+			if(!$nombre || !$telefono)
+			{
+				return response()->json(['mensaje'=>'No es posible procesar los valores','codigo'=>422],422);
+
+			}else{
+				$fabricante->nombre = $nombre;
+				$fabricante->telefono = $telefono;
+				$fabricante->save();
+
+				return response()->json(['mensaje' => 'Fabricante insertado'], 200);
+			}
+		}
+
 	}
 
 	/**
