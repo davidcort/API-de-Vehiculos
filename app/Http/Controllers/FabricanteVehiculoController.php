@@ -102,9 +102,81 @@ class FabricanteVehiculoController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($idFabricante, $idVehiculo)
+	public function update(Request $request, $idFabricante, $idVehiculo)
 	{
-		//
+		$metodo = $request->method();
+		$fabricante = Fabricante::find($idFabricante);
+
+		if(!$fabricante)
+		{
+			return response()->json(['mensaje'=>'No se encuentra este fabricante','codigo'=>404],404);
+		}
+
+		$vehiculo = $fabricante->vehiculos()->find($idVehiculo); //Obtenemos el id de la relacion vehiculos()
+
+		if(!$vehiculo)
+		{
+			return response()->json(['mensaje'=>'No se encuentra el vehiculo asociado al fabricante','codigo'=>404],404);
+		}
+
+		$color = $request->input('color');
+		$cilindraje = $request->input('cilindraje');
+		$potencia = $request->input('potencia');
+		$peso = $request->input('peso');
+
+		if($metodo === 'PATCH') //Si metodo es igual tanto en tipo como en valor
+		{
+			$bandera = false;
+
+			if($color != null && $color != '')
+			{
+				$vehiculo->color = $color;
+				$bandera = true;
+			}
+
+			if($cilindraje != null && $cilindraje != '')
+			{
+				$vehiculo->cilindraje = $cilindraje;
+				$bandera = true;
+			}
+
+			if($potencia != null && $potencia != '')
+			{
+				$vehiculo->potencia = $potencia;
+				$bandera = true;
+			}
+
+			if($peso != null && $peso != '')
+			{
+				$vehiculo->peso = $peso;
+				$bandera = true;
+			}
+
+			if($bandera)
+			{
+				$vehiculo->save(); //Con este método guardamos la informacion recibida en la BD
+				return response()->json(['mensaje' => 'Vehiculo editado'], 200);
+				
+			}else{
+				return response()->json(['mensaje'=>'No se modifico ningun vehiculo'],200);
+			}
+		
+		}else{
+
+			if(!$color || !$cilindraje || !$potencia || !$peso)
+			{
+				return response()->json(['mensaje'=>'No es posible procesar los valores','codigo'=>422],422);
+
+			}else{
+				$vehiculo->color = $color;
+				$vehiculo->cilindraje = $cilindraje;
+				$vehiculo->potencia = $potencia;
+				$vehiculo->peso = $peso;
+				$vehiculo->save();
+
+				return response()->json(['mensaje' => 'Vehiculo editado'], 200);
+			}
+		}
 	}
 
 	/**

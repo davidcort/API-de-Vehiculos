@@ -76,11 +76,13 @@ class FabricanteController extends Controller {
 
 		if($metodo === 'PATCH') //Si metodo es igual tanto en tipo como en valor
 		{
+			$bandera = false;
 			$nombre = $request->input('nombre');
 			
 			if($nombre != null && $nombre != '')
 			{
 				$fabricante->nombre = $nombre;
+				$bandera = true;
 			}
 
 			$telefono = $request->input('telefono');
@@ -88,11 +90,17 @@ class FabricanteController extends Controller {
 			if($telefono != null && $telefono != '')
 			{
 				$fabricante->telefono = $telefono;
+				$bandera = true;
 			}
 
-			$fabricante->save(); //Con este método guardamos la informacion recibida en la BD
-
-			return response()->json(['mensaje' => 'Fabricante insertado'], 200);
+			if($bandera)
+			{
+				$fabricante->save(); //Con este método guardamos la informacion recibida en la BD
+				return response()->json(['mensaje' => 'Fabricante editado'], 200);
+			}else{
+				//El codigo 304 indica que no hay neesidad de retornar nada
+				return response()->json(['mensaje'=>'No se modifico ningun fabricante'],200); 
+			}
 		
 		}else{
 
