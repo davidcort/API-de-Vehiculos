@@ -185,9 +185,25 @@ class FabricanteVehiculoController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($idFabricante, $idVehiculo)
+	public function destroy(Request $request, $idFabricante, $idVehiculo)
 	{
-		//
+		$fabricante = Fabricante::find($idFabricante);
+
+		if(!$fabricante)
+		{
+			return response()->json(['mensaje'=>'No se encuentra este fabricante','codigo'=>404],404); 
+		}
+		
+		$vehiculo = $fabricante->vehiculos()->find($idVehiculo); //Accedemos a la relación de vehiculos()
+
+		if(!$vehiculo)
+		{
+			return response()->json(['mensaje'=>'No se encuentra el vehiculo asociado al fabricante','codigo'=>404],404);
+		
+		}else{
+			$vehiculo->delete();
+			return response()->json(['mensaje' => 'Vehiculo eliminado'], 200);
+		}
 	}
 
 }

@@ -130,7 +130,25 @@ class FabricanteController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
-	}
+		$fabricante = Fabricante::find($id);
 
+		if(!$fabricante)
+		{
+			return response()->json(['mensaje'=>'No se encuentra este fabricante','codigo'=>404],404); 
+		
+		}else{
+			
+			//No se puede eliminar un fabricante que contenga vehiculos
+			$vehiculos = $fabricante->vehiculos; //De esta forma obtenemos solamente el array
+			
+			if(sizeof($vehiculos) > 0) // sizeof La cantidad de vehiculos
+			{
+				return response()->json(['mensaje'=>'Este fabricante posee vehiculos asociados y no puede ser eliminado. Eliminar primero sus vehiculos','codigo'=>409],409); 
+			
+			}else{
+				$fabricante->delete();
+				return response()->json(['mensaje' => 'Fabricante eliminado'], 200);
+			}
+		}
+	}
 }
