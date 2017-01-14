@@ -1,4 +1,3 @@
-@@ -1,46 +0,0 @@
 <?php namespace App\Http\Middleware;
 
 use Closure;
