@@ -12,7 +12,7 @@ class FabricanteVehiculoController extends Controller {
 
 	public function __construct()
 	{
-		$this->middleware('auth.basic.once', ['only' => ['store','update','destroy']]); //Indicamos que tipo de middleware que vamos a usar
+		$this->middleware('auth.basic', ['only' => ['store','update','destroy']]); //Indicamos que tipo de middleware que vamos a usar
 	}
 
 	/**
@@ -31,6 +31,16 @@ class FabricanteVehiculoController extends Controller {
 
 		return response()->json(['data'=>$fabricante->vehiculos()->get()],200); //Se obtienen todos los vehiculos del fabricante con el metodo vehiculos()
 		//return 'mostrando los vehiculos del fabricante con id '.$id;
+	}
+
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return Response
+	 */
+	public function create($id)
+	{
+		return 'mostrando formulario para agregar vehiculo al fabricante '.$id;
 	}
 
 	/**
@@ -62,7 +72,29 @@ class FabricanteVehiculoController extends Controller {
 		$fabricante->vehiculos()->create($request->all()); //Accedemos a la relacion con vehiculos
 
 		return response()->json(['mensaje'=>'Vehiculo insertado'],201);
-	}	 
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function show($idFabricante, $idVehiculo)
+	{
+		return 'Mostrando vehiculo ' . $idVehiculo . ' del fabricante ' . $idFabricante;
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit($idFabricante, $idVehiculo)
+	{
+		return "mostrando formulario para editar el vehiculo $idVehiculo del fabricante $idFabricante";
+	}
 
 	/**
 	 * Update the specified resource in storage.

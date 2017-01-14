@@ -12,12 +12,6 @@
 */
 
 Route::resource('vehiculos','VehiculoController', ['only' => ['index', 'show']]); //Solo necesitamos index y show
-Route::resource('fabricantes','FabricanteController',['except'=>['edit','create']]);
-Route::resource('fabricantes.vehiculos','FabricanteVehiculoController',['except' => ['show','edit','create']]); //recurso anidado
+Route::resource('fabricantes','FabricanteController');
+Route::resource('fabricantes.vehiculos','FabricanteVehiculoController',['except' => 'show']); //recurso anidado
 //Route::get('/','VehiculoController@showAll'); //Muestra todos los vehiculos
-
-//Rutas inexistentes
-Route::pattern('inexistente','.*');
-Route::any('/{inexistente}', function(){
-    return response()->json(['mensaje'=>'Ruta y/o metodo incorrecto','codigo'=>400],400);
-});
