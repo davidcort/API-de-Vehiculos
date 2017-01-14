@@ -11,7 +11,7 @@ class FabricanteController extends Controller {
 	
 	public function __construct()
 	{
-		$this->middleware('auth.basic', ['only' => ['store','update','destroy']]); //Indicamos que tipo de middleware que vamos a usar
+		$this->middleware('auth.basic.once', ['only' => ['store','update','destroy']]); //Indicamos que tipo de middleware que vamos a usar
 	}
 
 	/**
